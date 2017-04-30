@@ -23,6 +23,7 @@ Users.prototype.init = function () {
                 `id` VARCHAR(191) CHARACTER SET utf8mb4 NOT NULL, \
                 `channelId` VARCHAR(191) CHARACTER SET utf8mb4 NULL, \
                 `options` TEXT CHARACTER SET utf8mb4 NOT NULL, \
+                `insertTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, \
             UNIQUE INDEX `id_UNIQUE` (`id` ASC), \
             UNIQUE INDEX `channelId_UNIQUE` (`id` ASC)); \
         ', function (err) {
