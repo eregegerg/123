@@ -25,12 +25,10 @@ MsgStack.prototype.init = function () {
     var promise = Promise.resolve();
     promise = promise.then(function () {
         return new Promise(function (resolve, reject) {
-            // todo: rm service
             db.connection.query('\
             CREATE TABLE IF NOT EXISTS `streams` ( \
                 `id` VARCHAR(191) CHARACTER SET utf8mb4 NOT NULL, \
                 `channelId` VARCHAR(191) CHARACTER SET utf8mb4 NOT NULL, \
-                `service` VARCHAR(191) CHARACTER SET utf8mb4 NOT NULL, \
                 `data` LONGTEXT CHARACTER SET utf8mb4 NOT NULL, \
                 `imageFileId` TEXT CHARACTER SET utf8mb4 NULL, \
                 `insertTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, \
@@ -119,20 +117,18 @@ MsgStack.prototype.init = function () {
 };
 
 /**
- * @param {String[]} channelIds
- * @param {String} service
+ * @param {string[]} channelIds
  * @return {Promise.<Object[]>}
  */
-MsgStack.prototype.getStreams = function (channelIds, service) {
-    // todo: fix me
+MsgStack.prototype.getStreams = function (channelIds) {
     var db = this.gOptions.db;
     return new Promise(function (resolve, reject) {
         if (!channelIds.length) {
             return resolve([]);
         }
         db.connection.query('\
-            SELECT * FROM streams WHERE service = ? AND channelId IN ?; \
-        ', [service, [channelIds]], function (err, results) {
+            SELECT * FROM streams WHERE channelId IN ?; \
+        ', [[channelIds]], function (err, results) {
             if (err) {
                 reject(err);
             } else {
@@ -146,11 +142,12 @@ MsgStack.prototype.getStreams = function (channelIds, service) {
  * @return {Promise.<Object[]>}
  */
 MsgStack.prototype.getAllStreams = function () {
-    // todo: fix me
     var db = this.gOptions.db;
     return new Promise(function (resolve, reject) {
         db.connection.query('\
-            SELECT * FROM streams; \
+            SELECT * \
+            FROM streams \
+            LEFT JOIN channels ON channelId = channels.id; \
         ', function (err, results) {
             if (err) {
                 reject(err);
@@ -165,7 +162,6 @@ MsgStack.prototype.getAllStreams = function () {
  * @return {Promise.<Object[]>}
  */
 MsgStack.prototype.getLastStreamList = function () {
-    // todo: fix me
     var db = this.gOptions.db;
     return new Promise(function (resolve, reject) {
         db.connection.query('\
@@ -193,7 +189,6 @@ MsgStack.prototype.getLastStreamList = function () {
  * @return {Promise}
  */
 MsgStack.prototype.setStream = function (connection, stream) {
-    // todo: fix me
     return new Promise(function (resolve, reject) {
         connection.query('\
             INSERT INTO streams SET ? ON DUPLICATE KEY UPDATE ?; \
@@ -212,7 +207,6 @@ MsgStack.prototype.setStream = function (connection, stream) {
  * @return {Promise}
  */
 MsgStack.prototype.removeStreamIds = function (streamIds) {
-    // todo: fix me
     var db = this.gOptions.db;
     return new Promise(function (resolve, reject) {
         if (!streamIds.length) {
@@ -346,7 +340,6 @@ MsgStack.prototype.removeStreamMessage = function (messageId) {
  * @return {Promise}
  */
 MsgStack.prototype.migrateStream = function (connection, prevStreamId, streamId) {
-    // todo: fix me
     return new Promise(function (resolve, reject) {
         connection.query('\
             UPDATE streams SET id = ? WHERE id = ?; \
@@ -367,7 +360,6 @@ MsgStack.prototype.migrateStream = function (connection, prevStreamId, streamId)
  * @return {Promise}
  */
 MsgStack.prototype.setImageFileId = function (streamId, imageFileId) {
-    // todo: fix me
     var db = this.gOptions.db;
     return new Promise(function (resolve, reject) {
         db.connection.query('\
@@ -481,7 +473,6 @@ MsgStack.prototype.setTimeout = function (chatId, streamId, messageId, timeout) 
  * @return {Promise.<StackItem[]>}
  */
 MsgStack.prototype.getStackItems = function () {
-    // todo: fix me
     var db = this.gOptions.db;
     return new Promise(function (resolve, reject) {
         db.connection.query('\

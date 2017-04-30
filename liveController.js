@@ -50,10 +50,10 @@ LiveController.prototype.findPrevStreamId = function (prevStreams, stream) {
     return prevStreamId;
 };
 
-LiveController.prototype.insertStreams = function (streams, channelList, serviceName) {
+LiveController.prototype.insertStreams = function (streams, channelList) {
     var _this = this;
     const TIMEOUT = this.gOptions.config.timeout;
-    return _this.gOptions.msgStack.getStreams(channelList, serviceName).then(function (prevStreams) {
+    return _this.gOptions.msgStack.getStreams(channelList).then(function (prevStreams) {
         var streamIdPrevStreamMap = {};
         var channelIdPrevStreams = {};
         var prevStreamIds = [];
