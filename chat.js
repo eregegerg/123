@@ -606,7 +606,7 @@ var Chat = function(options) {
         }
 
         if (query.channelId) {
-            deleteChannel(req, query.channelId, query.service).then(function (result) {
+            deleteChannel(req, query.channelId).then(function (result) {
                 if (req.callback_query) {
                     return bot.editMessageText(result, {
                         chat_id: chatId,
@@ -638,9 +638,8 @@ var Chat = function(options) {
                     btnItem.text += ' (' + serviceToTitle[item.service] + ')';
 
                     btnItem.callback_data = '/delete?' + querystring.stringify({
-                            channelId: item.channelId,
-                            service: item.service
-                        });
+                        channelId: item.channelId
+                    });
 
                     btnList.push([btnItem]);
                 });
@@ -944,15 +943,19 @@ var Chat = function(options) {
      * @return {Promise.<String>}
      */
     var deleteChannel = function (req, channelId, serviceName) {
-        var found = req.channels.some(function (item) {
-            return item.service === serviceName && item.channelId === channelId;
+        var channel = null;
+        req.channels.some(function (/**dbChannel*/_channel) {
+            if (_channel.id = channelId) {
+                channel = _channel;
+                return true;
+            }
         });
 
-        if (!found) {
+        if (!channel) {
             return Promise.resolve(language.channelDontExist);
         }
 
-        return users.removeChannel(req.chat.id, serviceName, channelId).then(function () {
+        return users.removeChannel(req.chat.id, channel.id).then(function () {
             return users.getChannels(req.chat.id).then(function (channels) {
                 if (channels.length === 0) {
                     return users.removeChat(req.chat.id, 'Empty channels');
@@ -960,8 +963,8 @@ var Chat = function(options) {
             });
         }).then(function () {
             return language.channelDeleted
-                .replace('{channelName}', channelId)
-                .replace('{serviceName}', serviceToTitle[serviceName]);
+                .replace('{channelName}', channel.title)
+                .replace('{serviceName}', serviceToTitle[channel.service]);
         });
     };
 
@@ -986,7 +989,7 @@ var Chat = function(options) {
                     return users.setChat({id: chatId});
                 }
             }).then(function () {
-                return users.addChannel(chatId, serviceName, channelId);
+                return users.addChannel(chatId, channelId);
             }).then(function () {
                 return channel;
             });

@@ -202,7 +202,7 @@ LiveController.prototype.insertStreams = function (streams, channelList) {
                     var stream = newStreams.shift();
                     if (!stream) return;
 
-                    return _this.gOptions.users.getChatIdsByChannel(stream.service, stream.channelId).then(function (chatIds) {
+                    return _this.gOptions.users.getChatIdsByChannel(stream.channelId).then(function (chatIds) {
                         return _this.gOptions.db.transaction(function (connection) {
                             return _this.gOptions.msgStack.setStream(connection, stream).then(function () {
                                 return _this.gOptions.msgStack.addChatIdsStreamId(connection, chatIds, stream.id);
