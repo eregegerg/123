@@ -37,6 +37,7 @@ Users.prototype.init = function () {
     });
     promise = promise.then(function () {
         return new Promise(function (resolve, reject) {
+            // todo: rm service
             db.connection.query('\
             CREATE TABLE IF NOT EXISTS `chatIdChannelId` ( \
                 `chatId` VARCHAR(191) CHARACTER SET utf8mb4 NOT NULL, \
@@ -44,13 +45,15 @@ Users.prototype.init = function () {
                 `channelId` VARCHAR(191) CHARACTER SET utf8mb4 NOT NULL, \
                 `insertTime` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, \
             INDEX `chatId_idx` (`chatId` ASC), \
-            INDEX `service_idx` (`service` ASC), \
-            INDEX `channelId_idx` (`channelId` ASC), \
-            UNIQUE INDEX `chatIdServiceChannelId_UNIQUE` (`chatId` ASC, `service` ASC, `channelId` ASC), \
+            UNIQUE INDEX `chatIdChannelId_UNIQUE` (`chatId` ASC, `channelId` ASC), \
             FOREIGN KEY (`chatId`) \
                     REFERENCES `chats` (`id`) \
                     ON DELETE CASCADE \
-                    ON UPDATE CASCADE); \
+                    ON UPDATE CASCADE, \
+            FOREIGN KEY (`channelId`) \
+                REFERENCES `channels` (`id`) \
+                ON DELETE CASCADE \
+                ON UPDATE CASCADE); \
         ', function (err) {
                 if (err) {
                     reject(err);
@@ -214,6 +217,7 @@ Users.prototype.removeChatChannel = function (chatId, channelId, reason) {
  * @return {Promise.<[{service: string, channelId: string}]>}
  */
 Users.prototype.getChannels = function (chatId) {
+    // todo: fix me
     var db = this.gOptions.db;
     return new Promise(function (resolve, reject) {
         db.connection.query('\
@@ -234,6 +238,7 @@ Users.prototype.getChannels = function (chatId) {
  * @return {Promise.<[{service: string, channelId: string}]>}
  */
 Users.prototype.getChannel = function (chatId, channelId) {
+    // todo: fix me
     var db = this.gOptions.db;
     return new Promise(function (resolve, reject) {
         db.connection.query('\
@@ -255,6 +260,7 @@ Users.prototype.getChannel = function (chatId, channelId) {
  * @return {Promise}
  */
 Users.prototype.addChannel = function (chatId, service, channelId) {
+    // todo: fix me
     var db = this.gOptions.db;
     return new Promise(function (resolve, reject) {
         var item = {
@@ -281,6 +287,7 @@ Users.prototype.addChannel = function (chatId, service, channelId) {
  * @return {Promise}
  */
 Users.prototype.removeChannel = function (chatId, service, channelId) {
+    // todo: fix me
     var db = this.gOptions.db;
     return new Promise(function (resolve, reject) {
         db.connection.query('\
@@ -299,6 +306,7 @@ Users.prototype.removeChannel = function (chatId, service, channelId) {
  * @return {Promise}
  */
 Users.prototype.getAllChatChannels = function () {
+    // todo: fix me
     var db = this.gOptions.db;
     return new Promise(function (resolve, reject) {
         db.connection.query('\
@@ -317,6 +325,7 @@ Users.prototype.getAllChatChannels = function () {
  * @return {Promise}
  */
 Users.prototype.getAllChannels = function () {
+    // todo: fix me
     var db = this.gOptions.db;
     return new Promise(function (resolve, reject) {
         db.connection.query('\
@@ -337,6 +346,7 @@ Users.prototype.getAllChannels = function () {
  * @return {Promise}
  */
 Users.prototype.getChatIdsByChannel = function (service, channelId) {
+    // todo: fix me
     var db = this.gOptions.db;
     return new Promise(function (resolve, reject) {
         db.connection.query('\

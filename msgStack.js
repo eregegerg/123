@@ -25,6 +25,7 @@ MsgStack.prototype.init = function () {
     var promise = Promise.resolve();
     promise = promise.then(function () {
         return new Promise(function (resolve, reject) {
+            // todo: rm service
             db.connection.query('\
             CREATE TABLE IF NOT EXISTS `streams` ( \
                 `id` VARCHAR(191) CHARACTER SET utf8mb4 NOT NULL, \
@@ -37,10 +38,12 @@ MsgStack.prototype.init = function () {
                 `offlineTime` INT NULL DEFAULT 0, \
                 `isOffline` INT NOT NULL DEFAULT 0, \
                 `isTimeout` INT NOT NULL DEFAULT 0, \
-            INDEX `channelId_idx` (`channelId` ASC), \
-            INDEX `service_idx` (`service` ASC), \
             INDEX `insertTime_idx` (`insertTime` ASC), \
-            UNIQUE INDEX `id_UNIQUE` (`id` ASC)); \
+            UNIQUE INDEX `id_UNIQUE` (`id` ASC), \
+            FOREIGN KEY (`channelId`) \
+                REFERENCES `channels` (`id`) \
+                ON DELETE CASCADE \
+                ON UPDATE CASCADE); \
         ', function (err) {
                 if (err) {
                     reject(err);
@@ -121,6 +124,7 @@ MsgStack.prototype.init = function () {
  * @return {Promise.<Object[]>}
  */
 MsgStack.prototype.getStreams = function (channelIds, service) {
+    // todo: fix me
     var db = this.gOptions.db;
     return new Promise(function (resolve, reject) {
         if (!channelIds.length) {
@@ -142,6 +146,7 @@ MsgStack.prototype.getStreams = function (channelIds, service) {
  * @return {Promise.<Object[]>}
  */
 MsgStack.prototype.getAllStreams = function () {
+    // todo: fix me
     var db = this.gOptions.db;
     return new Promise(function (resolve, reject) {
         db.connection.query('\
@@ -160,6 +165,7 @@ MsgStack.prototype.getAllStreams = function () {
  * @return {Promise.<Object[]>}
  */
 MsgStack.prototype.getLastStreamList = function () {
+    // todo: fix me
     var db = this.gOptions.db;
     return new Promise(function (resolve, reject) {
         db.connection.query('\
@@ -187,6 +193,7 @@ MsgStack.prototype.getLastStreamList = function () {
  * @return {Promise}
  */
 MsgStack.prototype.setStream = function (connection, stream) {
+    // todo: fix me
     return new Promise(function (resolve, reject) {
         connection.query('\
             INSERT INTO streams SET ? ON DUPLICATE KEY UPDATE ?; \
@@ -205,6 +212,7 @@ MsgStack.prototype.setStream = function (connection, stream) {
  * @return {Promise}
  */
 MsgStack.prototype.removeStreamIds = function (streamIds) {
+    // todo: fix me
     var db = this.gOptions.db;
     return new Promise(function (resolve, reject) {
         if (!streamIds.length) {
@@ -338,6 +346,7 @@ MsgStack.prototype.removeStreamMessage = function (messageId) {
  * @return {Promise}
  */
 MsgStack.prototype.migrateStream = function (connection, prevStreamId, streamId) {
+    // todo: fix me
     return new Promise(function (resolve, reject) {
         connection.query('\
             UPDATE streams SET id = ? WHERE id = ?; \
@@ -358,6 +367,7 @@ MsgStack.prototype.migrateStream = function (connection, prevStreamId, streamId)
  * @return {Promise}
  */
 MsgStack.prototype.setImageFileId = function (streamId, imageFileId) {
+    // todo: fix me
     var db = this.gOptions.db;
     return new Promise(function (resolve, reject) {
         db.connection.query('\
@@ -471,6 +481,7 @@ MsgStack.prototype.setTimeout = function (chatId, streamId, messageId, timeout) 
  * @return {Promise.<StackItem[]>}
  */
 MsgStack.prototype.getStackItems = function () {
+    // todo: fix me
     var db = this.gOptions.db;
     return new Promise(function (resolve, reject) {
         db.connection.query('\

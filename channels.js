@@ -61,7 +61,7 @@ Channels.prototype.unWrapId = function (id) {
  * @param {string[]} ids
  * @return {Promise.<dbChannel[]>}
  */
-Channels.prototype.getChannel = function (ids) {
+Channels.prototype.getChannels = function (ids) {
     var _this = this;
     var db = this.gOptions.db;
     return new Promise(function (resolve, reject) {
@@ -70,12 +70,36 @@ Channels.prototype.getChannel = function (ids) {
         }
 
         db.connection.query('\
-            SELECT * FROM channels WHERE id; \
+            SELECT * FROM channels WHERE id IN ?; \
         ', [[ids]], function (err, results) {
             if (err) {
                 reject(err);
             } else {
                 resolve(results);
+            }
+        });
+    }).catch(function (err) {
+        debug('getChannels', err);
+        return [];
+    });
+};
+
+/**
+ * @private
+ * @param {string} id
+ * @return {Promise.<dbChannel>}
+ */
+Channels.prototype.getChannel = function (id) {
+    var _this = this;
+    var db = this.gOptions.db;
+    return new Promise(function (resolve, reject) {
+        db.connection.query('\
+            SELECT * FROM channels WHERE id = ? LIMIT 1; \
+        ', [id], function (err, results) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(results[0]);
             }
         });
     }).catch(function (err) {
@@ -91,7 +115,7 @@ Channels.prototype.getChannel = function (ids) {
  * @param {string} url
  * @return {Promise.<dbChannel>}
  */
-Channels.prototype.addChannel = function(id, service, title, url) {
+Channels.prototype.insertChannel = function(id, service, title, url) {
     var _this = this;
     var db = this.gOptions.db;
     var info = {
