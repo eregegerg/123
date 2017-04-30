@@ -43,14 +43,38 @@ Checker.prototype.getChannelList = function() {
     });
 };
 
+Checker.prototype.getServiceChannels = function() {
+    var _this = this;
+    var serviceNames = Object.keys(this.gOptions.services);
+    return _this.gOptions.users.getAllChannels().then(function (channels) {
+        var services = {};
+        channels.forEach(function (channel) {
+            var channelArray = services[channel.service];
+            if (!channelArray) {
+                channelArray = services[channel.service] = [];
+            }
+            channelArray.push(channel);
+        });
+
+        Object.keys(services).forEach(function (serviceName) {
+            if (serviceNames.indexOf(serviceName) === -1) {
+                debug('Service %s is not found! %j', serviceName, services[serviceName]);
+                delete services[serviceName];
+            }
+        });
+
+        return services;
+    });
+};
+
 Checker.prototype.updateList = function() {
     var _this = this;
     var services = _this.gOptions.services;
-    return _this.getChannelList().then(function (serviceChannelIds) {
-        var promiseList = Object.keys(serviceChannelIds).map(function (serviceName) {
-            var channelList = serviceChannelIds[serviceName];
-            return services[serviceName].getStreamList(channelList).then(function(videoList) {
-                return _this.gOptions.liveController.insertStreams(videoList, channelList, serviceName);
+    return _this.getServiceChannels().then(function (serviceChannels) {
+        var promiseList = Object.keys(serviceChannels).map(function (serviceName) {
+            var channels = serviceChannels[serviceName];
+            return services[serviceName].getStreamList(channels).then(function(videoList) {
+                return _this.gOptions.liveController.insertStreams(videoList, channels);
             });
         });
         return Promise.all(promiseList);
