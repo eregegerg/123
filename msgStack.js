@@ -203,7 +203,7 @@ MsgStack.prototype.setStream = function (connection, stream) {
 };
 
 /**
- * @param {String} streamIds
+ * @param {string[]} streamIds
  * @return {Promise}
  */
 MsgStack.prototype.removeStreamIds = function (streamIds) {
@@ -226,8 +226,8 @@ MsgStack.prototype.removeStreamIds = function (streamIds) {
 
 /**
  * @param {Object} connection
- * @param {String[]} chatIds
- * @param {String} streamId
+ * @param {string[]} chatIds
+ * @param {string} streamId
  * @return {Promise}
  */
 MsgStack.prototype.addChatIdsStreamId = function (connection, chatIds, streamId) {
@@ -253,7 +253,7 @@ MsgStack.prototype.addChatIdsStreamId = function (connection, chatIds, streamId)
 /**
  * @param {Object} connection
  * @param {Object[]} messages
- * @param {String} streamId
+ * @param {string} streamId
  * @return {Promise}
  */
 MsgStack.prototype.updateChatIdsStreamId = function (connection, messages, streamId) {
@@ -277,7 +277,7 @@ MsgStack.prototype.updateChatIdsStreamId = function (connection, messages, strea
 };
 
 /**
- * @param {String} streamId
+ * @param {string} streamId
  * @return {Promise}
  */
 MsgStack.prototype.getStreamMessages = function (streamId) {
@@ -315,7 +315,7 @@ MsgStack.prototype.addStreamMessage = function (message) {
 };
 
 /**
- * @param {String} messageId
+ * @param {string} messageId
  * @return {Promise}
  */
 MsgStack.prototype.removeStreamMessage = function (messageId) {
@@ -335,8 +335,8 @@ MsgStack.prototype.removeStreamMessage = function (messageId) {
 
 /**
  * @param {Object} connection
- * @param {String} prevStreamId
- * @param {String} streamId
+ * @param {string} prevStreamId
+ * @param {string} streamId
  * @return {Promise}
  */
 MsgStack.prototype.migrateStream = function (connection, prevStreamId, streamId) {
@@ -355,8 +355,8 @@ MsgStack.prototype.migrateStream = function (connection, prevStreamId, streamId)
 };
 
 /**
- * @param {String} streamId
- * @param {String} imageFileId
+ * @param {string} streamId
+ * @param {string} imageFileId
  * @return {Promise}
  */
 MsgStack.prototype.setImageFileId = function (streamId, imageFileId) {
@@ -375,9 +375,9 @@ MsgStack.prototype.setImageFileId = function (streamId, imageFileId) {
 };
 
 /**
- * @param {String} chatId
- * @param {String} streamId
- * @param {String} messageId
+ * @param {string} chatId
+ * @param {string} streamId
+ * @param {string} messageId
  * @return {Promise}
  */
 MsgStack.prototype.removeItem = function (chatId, streamId, messageId) {
@@ -400,8 +400,8 @@ MsgStack.prototype.removeItem = function (chatId, streamId, messageId) {
 };
 
 /**
- * @param {String} chatId
- * @param {String} messageId
+ * @param {string} chatId
+ * @param {string} messageId
  * @param {Object} data
  */
 MsgStack.prototype.updateLog = function (chatId, messageId, data) {
@@ -413,8 +413,8 @@ MsgStack.prototype.updateLog = function (chatId, messageId, data) {
 };
 
 /**
- * @param {String} chatId
- * @param {String} messageId
+ * @param {string} chatId
+ * @param {string} messageId
  * @param {Object} data
  */
 MsgStack.prototype.sendLog = function (chatId, messageId, data) {
@@ -426,9 +426,9 @@ MsgStack.prototype.sendLog = function (chatId, messageId, data) {
 };
 
 /**
- * @param {String} chatId
- * @param {String} streamId
- * @param {String} messageId
+ * @param {string} chatId
+ * @param {string} streamId
+ * @param {string} messageId
  * @param {Number} timeout
  */
 MsgStack.prototype.setTimeout = function (chatId, streamId, messageId, timeout) {
@@ -452,21 +452,21 @@ MsgStack.prototype.setTimeout = function (chatId, streamId, messageId, timeout) 
 
 /**
  * @typedef {{}} StackItem
- * @property {String} id
- * @property {String} channelId
- * @property {String} service
- * @property {String} data
- * @property {String} [imageFileId]
- * @property {String} insertTime
+ * @property {string} id
+ * @property {string} channelId
+ * @property {string} service
+ * @property {string} data
+ * @property {string} [imageFileId]
+ * @property {string} insertTime
  * @property {Number} checkTime
  * @property {Number} offlineTime
  * @property {Number} isOffline
  * @property {Number} isTimeout
- * @property {String} chatId
- * @property {String} streamId
- * @property {String} messageId
- * @property {String} messageType
- * @property {String} messageChatId
+ * @property {string} chatId
+ * @property {string} streamId
+ * @property {string} messageId
+ * @property {string} messageType
+ * @property {string} messageChatId
  * @property {Number} timeout
  */
 /**
