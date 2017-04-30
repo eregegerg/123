@@ -385,13 +385,11 @@ utils.arrToParts = function (arr, quote) {
     return arrList;
 };
 
-utils.getTimeoutStream = function (service, channelId) {
-    var item = {
+utils.getTimeoutStream = function (channelId) {
+    return {
         channelId: channelId,
-        service: service,
         isTimeout: 1
     };
-    return item;
 };
 
 utils.getNow = function () {
