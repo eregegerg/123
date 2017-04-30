@@ -939,10 +939,9 @@ var Chat = function(options) {
     /**
      * @param {Object} req
      * @param {String} channelId
-     * @param {String} serviceName
      * @return {Promise.<String>}
      */
-    var deleteChannel = function (req, channelId, serviceName) {
+    var deleteChannel = function (req, channelId) {
         var channel = null;
         req.channels.some(function (/**dbChannel*/_channel) {
             if (_channel.id = channelId) {
