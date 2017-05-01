@@ -119,7 +119,7 @@ Channels.prototype.insertChannel = function(id, service, title, url) {
     var _this = this;
     var db = this.gOptions.db;
     var info = {
-        id: _this.channels.wrapId(id, service),
+        id: _this.wrapId(id, service),
         service: service,
         title: title,
         url: url
