@@ -143,7 +143,7 @@ var Chat = function(options) {
                     services.push(service);
                 }
 
-                var channelId = _channel.channelId;
+                var channelId = _channel.id;
                 var channel = service.channelObjMap[channelId];
                 if (!channel) {
                     channel = service.channelObjMap[channelId] = {
@@ -775,7 +775,7 @@ var Chat = function(options) {
                 services.push(service);
             }
 
-            var channelId = _channel.channelId;
+            var channelId = _channel.id;
             var channel = service.channelObjMap[channelId];
             if (!channel) {
                 channel = service.channelObjMap[channelId] = {
@@ -959,7 +959,7 @@ var Chat = function(options) {
             // var title = channel.title;
 
             var found = req.channels.some(function (channel) {
-                return channel.channelId === channelId;
+                return channel.id === channelId;
             });
 
             if (found) {
@@ -1167,7 +1167,7 @@ var Chat = function(options) {
         var serviceList = {};
         channels.forEach(function (channel) {
             for (var i = 0, stream; stream = lastStreamList[i]; i++) {
-                if (stream._channelId !== channel.channelId) continue;
+                if (stream._channelId !== channel.id) continue;
 
                 var serviceChannels = serviceList[channel.service];
                 if (!serviceChannels) {
