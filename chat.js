@@ -120,22 +120,22 @@ var Chat = function(options) {
     textOrCb(/\/top/, function (req) {
         var chatId = req.getChatId();
 
-        return users.getAllChatChannels().then(function (items) {
+        return users.getAllChatChannels().then(function (_channels) {
             var chatIds = [];
             var channels = [];
             var services = [];
 
             var serviceObjMap = {};
-            items.forEach(function (item) {
-                var chatId = item.chatId;
+            _channels.forEach(function (_channel) {
+                var chatId = _channel.chatId;
                 if (chatIds.indexOf(chatId) === -1) {
                     chatIds.push(chatId);
                 }
 
-                var service = serviceObjMap[item.service];
+                var service = serviceObjMap[_channel.service];
                 if (!service) {
-                    service = serviceObjMap[item.service] = {
-                        name: item.service,
+                    service = serviceObjMap[_channel.service] = {
+                        name: _channel.service,
                         count: 0,
                         channels: [],
                         channelObjMap: {}
@@ -143,13 +143,13 @@ var Chat = function(options) {
                     services.push(service);
                 }
 
-                var channelId = item.channelId;
+                var channelId = _channel.channelId;
                 var channel = service.channelObjMap[channelId];
                 if (!channel) {
                     channel = service.channelObjMap[channelId] = {
                         id: channelId,
-                        title: item.title,
-                        url: item.url,
+                        title: _channel.title,
+                        url: _channel.url,
                         count: 0
                     };
                     service.count++;
@@ -623,14 +623,14 @@ var Chat = function(options) {
 
         var btnList = [];
         var promise = Promise.resolve();
-        channels.forEach(function(item) {
+        channels.forEach(function(channel) {
             var btnItem = {};
 
-            btnItem.text = item.title;
-            btnItem.text += ' (' + serviceToTitle[item.service] + ')';
+            btnItem.text = channel.title;
+            btnItem.text += ' (' + serviceToTitle[channel.service] + ')';
 
             btnItem.callback_data = '/delete?' + querystring.stringify({
-                channelId: item.channelId
+                channelId: channel.channelId
             });
 
             btnList.push([btnItem]);
@@ -763,11 +763,11 @@ var Chat = function(options) {
         var services = [];
 
         var serviceObjMap = {};
-        channels.forEach(function (item) {
-            var service = serviceObjMap[item.service];
+        channels.forEach(function (_channel) {
+            var service = serviceObjMap[_channel.service];
             if (!service) {
-                service = serviceObjMap[item.service] = {
-                    name: item.service,
+                service = serviceObjMap[_channel.service] = {
+                    name: _channel.service,
                     count: 0,
                     channels: [],
                     channelObjMap: {}
@@ -775,13 +775,13 @@ var Chat = function(options) {
                 services.push(service);
             }
 
-            var channelId = item.channelId;
+            var channelId = _channel.channelId;
             var channel = service.channelObjMap[channelId];
             if (!channel) {
                 channel = service.channelObjMap[channelId] = {
                     id: channelId,
-                    title: item.title,
-                    url: item.url
+                    title: _channel.title,
+                    url: _channel.url
                 };
                 service.count++;
                 service.channels.push(channel);
@@ -958,8 +958,8 @@ var Chat = function(options) {
             var channelId = channel.id;
             // var title = channel.title;
 
-            var found = req.channels.some(function (item) {
-                return item.service === serviceName && item.channelId === channelId;
+            var found = req.channels.some(function (channel) {
+                return channel.channelId === channelId;
             });
 
             if (found) {
@@ -1165,14 +1165,14 @@ var Chat = function(options) {
 
     var getOnlineChannelList = function (channels, lastStreamList) {
         var serviceList = {};
-        channels.forEach(function (item) {
+        channels.forEach(function (channel) {
             for (var i = 0, stream; stream = lastStreamList[i]; i++) {
-                if (stream._service !== item.service) continue;
-                if (stream._channelId !== item.channelId) continue;
+                if (stream._service !== channel.service) continue;
+                if (stream._channelId !== channel.channelId) continue;
 
-                var serviceChannels = serviceList[item.service];
+                var serviceChannels = serviceList[channel.service];
                 if (!serviceChannels) {
-                    serviceChannels = serviceList[item.service] = {};
+                    serviceChannels = serviceList[channel.service] = {};
                 }
 
                 var streamList = serviceChannels[stream._channelId];
