@@ -142,7 +142,7 @@ utils.getNowStreamText = function(gOptions, stream) {
 
     var status = stream.channel.status || '';
     var game = stream.game || '';
-    var name = stream.channel.display_name || stream.channel.name || '';
+    var name = stream.channel.name || '';
     if (status.indexOf(game) !== -1) {
         game = '';
     }
@@ -202,7 +202,7 @@ utils.getNowStreamText = function(gOptions, stream) {
  * @param {boolean} stream._isOffline
  * @param {boolean} stream._isTimeout
  * @param {Object} stream.channel
- * @param {string} stream.channel.display_name
+ * @param {string} stream.channel.name
  * @returns {string}
  */
 utils.getStreamText = function(gOptions, stream) {
@@ -221,7 +221,7 @@ utils.getStreamText = function(gOptions, stream) {
     var status = stream.channel.status || '';
     var viewers = stream.viewers || 0;
     var game = stream.game || '';
-    var name = stream.channel.display_name || stream.channel.name || '';
+    var name = stream.channel.name || '';
     if (status.indexOf(game) !== -1) {
         game = '';
     }
