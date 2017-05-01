@@ -196,7 +196,7 @@ utils.getNowStreamText = function(gOptions, stream) {
  * @param {number} stream.viewers
  * @param {string} stream.game
  * @param {string} stream._id
- * @param {string} stream._service
+ * @param {string} stream.service
  * @param {string} stream._channelId
  * @param {Array} stream.preview
  * @param {boolean} stream._isOffline

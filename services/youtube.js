@@ -60,7 +60,6 @@ Youtube.prototype.insertItem = function (channel, snippet, id, viewers) {
         var channelName = snippet.channelId;
 
         var data = {
-            _service: _this.name,
             service: _this.name,
             _id: _this.channels.wrapId(id, _this.name),
             _channelId: channel.id,

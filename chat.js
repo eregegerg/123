@@ -1167,7 +1167,6 @@ var Chat = function(options) {
         var serviceList = {};
         channels.forEach(function (channel) {
             for (var i = 0, stream; stream = lastStreamList[i]; i++) {
-                if (stream._service !== channel.service) continue;
                 if (stream._channelId !== channel.channelId) continue;
 
                 var serviceChannels = serviceList[channel.service];

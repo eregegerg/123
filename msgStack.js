@@ -408,7 +408,7 @@ MsgStack.prototype.updateLog = function (chatId, messageId, data) {
     /*var debugItem = JSON.parse(JSON.stringify(data));
     delete debugItem.preview;
     delete debugItem._videoId;
-    delete debugItem._service;*/
+    delete debugItem.service;*/
     debugLog('[update] %s %s', messageId, chatId);
 };
 
@@ -421,7 +421,7 @@ MsgStack.prototype.sendLog = function (chatId, messageId, data) {
     /*var debugItem = JSON.parse(JSON.stringify(data));
     delete debugItem.preview;
     delete debugItem._videoId;
-    delete debugItem._service;*/
+    delete debugItem.service;*/
     debugLog('[send] %s %s', messageId, chatId);
 };
 
