@@ -34,11 +34,6 @@ Twitch.prototype.insertItem = function (channel, stream) {
     var _this = this;
     return Promise.resolve().then(function () {
         var id = stream._id;
-        var viewers = parseInt(stream.viewers) || 0;
-        var game = stream.game;
-        var createdAt = stream.created_at;
-        var channelTitle = stream.channel.display_name;
-        var channelName = stream.channel.name;
 
         var previewList = [];
         stream.preview && ['template', 'large', 'medium'].forEach(function(quality) {
@@ -54,12 +49,12 @@ Twitch.prototype.insertItem = function (channel, stream) {
         previewList = previewList.map(base.noCacheUrl);
 
         var data = {
-            viewers: viewers,
-            game: game,
+            viewers: parseInt(stream.viewers) || 0,
+            game: stream.game || '',
             preview: previewList,
-            created_at: createdAt,
+            created_at: stream.created_at,
             channel: {
-                name: channelTitle || channelName,
+                name: stream.channel.display_name || stream.channel.name,
                 status: stream.channel.status,
                 url: stream.channel.url
             }

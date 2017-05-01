@@ -40,8 +40,6 @@ Youtube.prototype.insertItem = function (channel, snippet, id, viewers) {
             return;
         }
 
-        var now = base.getNow();
-
         var previewList = ['maxresdefault_live', 'sddefault_live', 'hqdefault_live', 'mqdefault_live', 'default_live'].map(function(quality) {
             return 'https://i.ytimg.com/vi/' + id + '/' + quality + '.jpg';
         });
@@ -55,17 +53,14 @@ Youtube.prototype.insertItem = function (channel, snippet, id, viewers) {
         });*/
 
         var game = '';
-        var createdAt = snippet.publishedAt;
-        var channelTitle = snippet.channelTitle;
-        var channelName = snippet.channelId;
 
         var data = {
             viewers: viewers,
             game: game,
             preview: previewList,
-            created_at: createdAt,
+            created_at: snippet.publishedAt,
             channel: {
-                name: channelTitle || channelName,
+                name: snippet.channelTitle || snippet.channelId,
                 status: snippet.title,
                 url: 'https://gaming.youtube.com/watch?v=' + id
             }
@@ -410,7 +405,7 @@ Youtube.prototype.getChannelId = function(channelName) {
             }
 
             var id = channelId;
-            var title = snippet.channelTitle;
+            var title = snippet.channelTitle || channelId;
             var url = _this.getChannelUrl(channelId);
 
             return _this.channels.insertChannel(id, _this.name, title, url);

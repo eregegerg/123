@@ -37,11 +37,9 @@ GoodGame.prototype.insertItem = function (channel, stream) {
         }
 
         var id = stream.id;
-        var viewers = parseInt(stream.viewers) || 0;
-        var channelTitle = stream.key;
 
-        var thumb = stream.channel.thumb;
         var previewList = [];
+        var thumb = stream.channel.thumb;
         if (thumb) {
             previewList.push(thumb.replace(/_240(\.jpg)$/, '$1'));
         }
@@ -52,19 +50,19 @@ GoodGame.prototype.insertItem = function (channel, stream) {
             return base.noCacheUrl(url);
         });
 
-        var games = stream.channel.games;
         var game = '';
+        var games = stream.channel.games;
         games && games.some(function (item) {
             return game = item.title;
         });
 
         var data = {
-            viewers: viewers,
+            viewers: parseInt(stream.viewers) || 0,
             game: game,
             preview: previewList,
             created_at: undefined,
             channel: {
-                name: channelTitle,
+                name: stream.key,
                 status: stream.channel.title,
                 url: stream.channel.url
             }

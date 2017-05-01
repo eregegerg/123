@@ -39,23 +39,16 @@ Beam.prototype.insertItem = function (channel, snippet) {
         var previewList = [];
         previewList.push('https://thumbs.beam.pro/channel/' + id + '.big.jpg');
 
-        var game = snippet.type && snippet.type.name;
-
-        var viewers = snippet.viewersCurrent || 0;
-
-        var createdAt = snippet.createdAt;
-        var status = snippet.name;
-        var channelTitle = snippet.token;
         var url = _this.getChannelUrl(snippet.token);
 
         var data = {
-            viewers: viewers,
-            game: game,
+            viewers: snippet.viewersCurrent || 0,
+            game: snippet.type && snippet.type.name || '',
             preview: previewList,
-            created_at: createdAt,
+            created_at: snippet.createdAt,
             channel: {
-                name: channelTitle,
-                status: status,
+                name: snippet.token,
+                status: snippet.name,
                 url: url
             }
         };

@@ -35,11 +35,6 @@ Hitbox.prototype.insertItem = function (channel, stream) {
         }
 
         var id = stream.media_id;
-        var viewers = parseInt(stream.media_views) || 0;
-        var game = stream.category_name;
-        var createdAt = stream.media_live_since;
-        var channelTitle = stream.media_display_name;
-        var channelName = stream.media_user_name;
 
         var previewList = [];
         if (stream.media_thumbnail_large) {
@@ -54,12 +49,12 @@ Hitbox.prototype.insertItem = function (channel, stream) {
         });
 
         var data = {
-            viewers: viewers,
-            game: game,
+            viewers: parseInt(stream.media_views) || 0,
+            game: stream.category_name || '',
             preview: previewList,
-            created_at: createdAt,
+            created_at: stream.media_live_since,
             channel: {
-                name: channelTitle || channelName,
+                name: stream.media_display_name || stream.media_user_name,
                 status: stream.media_status,
                 url: stream.channel.channel_link
             }
