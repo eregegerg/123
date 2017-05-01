@@ -76,10 +76,7 @@ Twitch.prototype.insertItem = function (channel, stream) {
             promise = promise.then(function () {
                 channel.title = data.channel.name;
                 channel.url = channelUrl;
-                return _this.channels.updateChannel(channel.id, {
-                    title: channel.title,
-                    url: channel.url
-                });
+                return _this.channels.updateChannel(channel.id, channel);
             });
         }
 

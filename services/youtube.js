@@ -79,10 +79,7 @@ Youtube.prototype.insertItem = function (channel, snippet, id, viewers) {
         if (channel.title !== data.channel.name) {
             promise = promise.then(function () {
                 channel.title = data.channel.name;
-                return _this.channels.updateChannel(channel.id, {
-                    title: channel.title,
-                    url: channel.url
-                });
+                return _this.channels.updateChannel(channel.id, channel);
             });
         }
 
