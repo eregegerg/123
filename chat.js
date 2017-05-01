@@ -926,7 +926,7 @@ var Chat = function(options) {
     var deleteChannel = function (req, channelId) {
         var channel = null;
         req.channels.some(function (/**dbChannel*/_channel) {
-            if (_channel.id = channelId) {
+            if (_channel.id === channelId) {
                 channel = _channel;
                 return true;
             }
