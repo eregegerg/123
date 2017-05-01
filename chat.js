@@ -275,33 +275,33 @@ var Chat = function(options) {
 
             var query = req.getQuery();
             var page = query.page || 0;
-            return getWatchBtnList(req.channels, page, lastStreamList).then(function (btnList) {
-                btnList.unshift([{
-                    text: language.refresh,
-                    callback_data: '/online'
-                }]);
+            var btnList = getWatchBtnList(req.channels, page, lastStreamList);
 
-                var options = {
-                    disable_web_page_preview: true,
-                    parse_mode: 'HTML',
-                    reply_markup: JSON.stringify({
-                        inline_keyboard: btnList
-                    })
-                };
+            btnList.unshift([{
+                text: language.refresh,
+                callback_data: '/online'
+            }]);
 
-                if (req.callback_query && !query.rel) {
-                    options.chat_id = chatId;
-                    options.message_id = messageId;
-                    return bot.editMessageText(text, options).catch(function (err) {
-                        if (/message is not modified/.test(err.message)) {
-                            return;
-                        }
-                        throw err;
-                    });
-                } else {
-                    return bot.sendMessage(chatId, text, options);
-                }
-            });
+            var options = {
+                disable_web_page_preview: true,
+                parse_mode: 'HTML',
+                reply_markup: JSON.stringify({
+                    inline_keyboard: btnList
+                })
+            };
+
+            if (req.callback_query && !query.rel) {
+                options.chat_id = chatId;
+                options.message_id = messageId;
+                return bot.editMessageText(text, options).catch(function (err) {
+                    if (/message is not modified/.test(err.message)) {
+                        return;
+                    }
+                    throw err;
+                });
+            } else {
+                return bot.sendMessage(chatId, text, options);
+            }
         }).catch(function (err) {
             debug('Command online error!', err);
         });
