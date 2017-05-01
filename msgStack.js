@@ -176,6 +176,7 @@ MsgStack.prototype.getLastStreamList = function () {
                     data._photoId = item.imageFileId;
                     data._isOffline = !!item.isOffline;
                     data._isTimeout = !!item.isTimeout;
+                    data._channelId = item.channelId;
                     return data;
                 }));
             }
@@ -556,6 +557,7 @@ MsgStack.prototype.updateItem = function (item) {
         data._id = item.id;
         data._isOffline = !!item.isOffline;
         data._isTimeout = !!item.isTimeout;
+        data._channelId = item.channelId;
 
         return _this.gOptions.users.getChat(chatId).then(function (chat) {
             if (!chat) {
@@ -638,6 +640,7 @@ MsgStack.prototype.sendItem = function (item) {
         data._id = item.id;
         data._isOffline = !!item.isOffline;
         data._isTimeout = !!item.isTimeout;
+        data._channelId = item.channelId;
 
         return _this.gOptions.users.getChat(chatId).then(function (chat) {
             if (!chat) {

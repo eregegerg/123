@@ -54,9 +54,6 @@ Twitch.prototype.insertItem = function (channel, stream) {
         previewList = previewList.map(base.noCacheUrl);
 
         var data = {
-            _id: _this.channels.wrapId(id, _this.name),
-            _channelId: channel.id,
-
             viewers: viewers,
             game: game,
             preview: previewList,
