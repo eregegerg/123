@@ -396,7 +396,7 @@ var Chat = function(options) {
                     ]).then(function (result) {
                         var channels = result[0];
                         var lastStreamList = result[1];
-                        var onlineServiceList = getOnlineChannelList(channels, lastStreamList);
+                        var onlineServiceList = getOnlineServiceChannelStreams(channels, lastStreamList);
                         var channelList = onlineServiceList[serviceName] || {};
                         var streamList = channelList[channel.id] || [];
                         streamList.forEach(function (stream) {
@@ -1129,39 +1129,32 @@ var Chat = function(options) {
     var getWatchBtnList = function (channels, page, lastStreamList) {
         var btnList = [];
 
-        var promise = Promise.resolve();
-        var serviceList = getOnlineChannelList(channels, lastStreamList);
-        Object.keys(serviceList).forEach(function (service) {
-            var channelList = serviceList[service];
+        var serviceChannelStreams = getOnlineServiceChannelStreams(channels, lastStreamList);
+        Object.keys(serviceChannelStreams).forEach(function (service) {
+            var channelStreams = serviceChannelStreams[service];
 
-            Object.keys(channelList).forEach(function (channelId) {
-                var streamList = channelList[channelId];
-                if (!streamList.length) {
+            Object.keys(channelStreams).forEach(function (channelId) {
+                var streams = channelStreams[channelId];
+                if (!streams.length) {
                     return;
                 }
 
-                promise = promise.then(function () {
-                    return _this.gOptions.channels.getChannel(channelId).then(function (channel) {
-                        var title = channel.title;
-                        var text = title + ' (' + serviceToTitle[service] + ')';
+                var title = streams[0].channel.name;
+                var text = title + ' (' + serviceToTitle[service] + ')';
 
-                        btnList.push([{
-                            text: text,
-                            callback_data: '/watch?' + querystring.stringify({
-                                channelId: channelId
-                            })
-                        }]);
-                    });
-                });
+                btnList.push([{
+                    text: text,
+                    callback_data: '/watch?' + querystring.stringify({
+                        channelId: channelId
+                    })
+                }]);
             });
         });
 
-        return promise.then(function () {
-            return base.pageBtnList(btnList, '/online', page);
-        });
+        return base.pageBtnList(btnList, '/online', page);
     };
 
-    var getOnlineChannelList = function (channels, lastStreamList) {
+    var getOnlineServiceChannelStreams = function (channels, lastStreamList) {
         var serviceList = {};
         channels.forEach(function (channel) {
             for (var i = 0, stream; stream = lastStreamList[i]; i++) {
@@ -1191,7 +1184,7 @@ var Chat = function(options) {
     var getOnlineText = function (channels, lastStreamList) {
         var onlineList = [];
 
-        var serviceList = getOnlineChannelList(channels, lastStreamList);
+        var serviceList = getOnlineServiceChannelStreams(channels, lastStreamList);
         Object.keys(serviceList).forEach(function (service) {
             var channelList = serviceList[service];
 

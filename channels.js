@@ -83,30 +83,6 @@ Channels.prototype.getChannels = function (ids) {
 };
 
 /**
- * @private
- * @param {string} id
- * @return {Promise.<dbChannel>}
- */
-Channels.prototype.getChannel = function (id) {
-    var _this = this;
-    var db = this.gOptions.db;
-    return new Promise(function (resolve, reject) {
-        db.connection.query('\
-            SELECT * FROM channels WHERE id = ? LIMIT 1; \
-        ', [id], function (err, results) {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(results[0]);
-            }
-        });
-    }).catch(function (err) {
-        debug('getChannel', err);
-        return [];
-    });
-};
-
-/**
  * @param {*} id
  * @param {string} service
  * @param {string} title
