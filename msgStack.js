@@ -145,9 +145,7 @@ MsgStack.prototype.getAllStreams = function () {
     var db = this.gOptions.db;
     return new Promise(function (resolve, reject) {
         db.connection.query('\
-            SELECT * \
-            FROM streams \
-            LEFT JOIN channels ON channelId = channels.id; \
+            SELECT * FROM streams; \
         ', function (err, results) {
             if (err) {
                 reject(err);

@@ -23,12 +23,21 @@ Checker.prototype.getServiceChannels = function() {
     var _this = this;
     var serviceNames = Object.keys(this.gOptions.services);
     return _this.gOptions.users.getAllChannels().then(function (channels) {
+        var dDblChannel = [];
         var services = {};
         channels.forEach(function (channel) {
+            // todo: rm me!
+            if (dDblChannel.indexOf(channel.id) !== -1) {
+                debug('Dbl channels! Fix me!');
+                return;
+            }
+            dDblChannel.push(channel.id);
+
             var channelArray = services[channel.service];
             if (!channelArray) {
                 channelArray = services[channel.service] = [];
             }
+
             channelArray.push(channel);
         });
 
