@@ -38,11 +38,11 @@ Channels.prototype.init = function () {
  * @param {string} service
  */
 Channels.prototype.wrapId = function (id, service) {
-    return [service, JSON.stringify(id)].join(':');
+    return [service.substr(0, 2), JSON.stringify(id)].join(':');
 };
 
 Channels.prototype.unWrapId = function (id) {
-    var _id = id.substr(id.indexOf(':') + 1);
+    var _id = id.substr(3);
     return JSON.parse(_id);
 };
 
