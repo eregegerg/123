@@ -326,7 +326,7 @@ Users.prototype.getAllChannels = function () {
     var db = this.gOptions.db;
     return new Promise(function (resolve, reject) {
         db.connection.query('\
-            SELECT channels.* \
+            SELECT DISTINCT channels.* \
             FROM channels \
             INNER JOIN chatIdChannelId ON chatIdChannelId.channelId = channels.id; \
         ', function (err, results) {
