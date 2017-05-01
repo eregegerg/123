@@ -85,10 +85,13 @@ GoodGame.prototype.insertItem = function (channel, stream) {
         };
 
         var promise = Promise.resolve();
-        if (channel.title !== data.channel.title) {
+        if (channel.title !== data.channel.name) {
             promise = promise.then(function () {
-                channel.title = data.channel.title;
-                return _this.channels.updateChannel(channel.id, channel);
+                channel.title = data.channel.name;
+                return _this.channels.updateChannel(channel.id, {
+                    title: channel.title,
+                    url: channel.url
+                });
             });
         }
 

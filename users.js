@@ -218,7 +218,7 @@ Users.prototype.getChannels = function (chatId) {
     var db = this.gOptions.db;
     return new Promise(function (resolve, reject) {
         db.connection.query('\
-            SELECT channels.service, channelId \
+            SELECT channels.service, channelId, channels.id, channels.title, channels.url \
             FROM chatIdChannelId \
             LEFT JOIN channels ON channelId = channels.id \
             WHERE chatId = ? ORDER BY insertTime ASC; \
@@ -241,7 +241,7 @@ Users.prototype.getChannel = function (chatId, channelId) {
     var db = this.gOptions.db;
     return new Promise(function (resolve, reject) {
         db.connection.query('\
-            SELECT channels.service, channelId \
+            SELECT channels.service, channelId, channels.id, channels.title, channels.url \
             FROM chatIdChannelId \
             LEFT JOIN channels ON channelId = channels.id \
             WHERE chatId = ? AND channelId = ? LIMIT 1; \
@@ -326,7 +326,7 @@ Users.prototype.getAllChannels = function () {
     var db = this.gOptions.db;
     return new Promise(function (resolve, reject) {
         db.connection.query('\
-            SELECT channels.service, chatIdChannelId.channelId \
+            SELECT channels.service, chatIdChannelId.channelId, channels.id, channels.title, channels.url \
             FROM channels \
             INNER JOIN chatIdChannelId ON chatIdChannelId.channelId = channels.id; \
         ', function (err, results) {

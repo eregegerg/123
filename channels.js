@@ -38,14 +38,12 @@ Channels.prototype.init = function () {
  * @param {string} service
  */
 Channels.prototype.wrapId = function (id, service) {
-    return JSON.stringify({
-        id: id,
-        service: service
-    });
+    return [service, JSON.stringify(id)].join(':');
 };
 
 Channels.prototype.unWrapId = function (id) {
-    return JSON.parse(id).id;
+    var _id = id.substr(id.indexOf(':') + 1);
+    return JSON.parse(_id);
 };
 
 /**
@@ -129,7 +127,7 @@ Channels.prototype.insertChannel = function(id, service, title, url) {
             INSERT INTO channels SET ? ON DUPLICATE KEY UPDATE ? \
         ', [info, info], function (err, results) {
             if (err) {
-                debug('addChannel', err);
+                debug('insertChannel', err);
                 reject(err);
             } else {
                 resolve(info);
