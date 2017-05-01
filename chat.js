@@ -630,7 +630,7 @@ var Chat = function(options) {
             btnItem.text += ' (' + serviceToTitle[channel.service] + ')';
 
             btnItem.callback_data = '/delete?' + querystring.stringify({
-                channelId: channel.channelId
+                channelId: channel.id
             });
 
             btnList.push([btnItem]);
