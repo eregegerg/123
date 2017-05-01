@@ -13,11 +13,13 @@ var LiveController = function (options) {
 LiveController.prototype.clean = function () {
     var _this = this;
     return _this.gOptions.msgStack.getAllStreams().then(function (streams) {
-        return _this.gOptions.checker.getChannelList().then(function (serviceChannelIds) {
+        return _this.gOptions.users.getAllChannels().then(function (channels) {
+            var channelIds = channels.map(function (channel) {
+                return channel.id;
+            });
             var streamIds = [];
             streams.forEach(function (stream) {
-                var channels = serviceChannelIds[stream.service] || [];
-                if (channels.indexOf(stream.channelId) === -1) {
+                if (channelIds.indexOf(stream.channelId) === -1) {
                     streamIds.push(stream.id);
                 }
             });

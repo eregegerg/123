@@ -17,32 +17,8 @@ var Checker = function(options) {
 };
 
 /**
- * @return {Promise.<Object>}
+ * @return {Promise.<dbChannel[][]>}
  */
-Checker.prototype.getChannelList = function() {
-    var _this = this;
-    var serviceNames = Object.keys(this.gOptions.services);
-    return _this.gOptions.users.getAllChannels().then(function (channels) {
-        var serviceList = {};
-        channels.forEach(function (item) {
-            var channelList = serviceList[item.service];
-            if (!channelList) {
-                channelList = serviceList[item.service] = [];
-            }
-            channelList.push(item.channelId);
-        });
-
-        Object.keys(serviceList).forEach(function (serviceName) {
-            if (serviceNames.indexOf(serviceName) === -1) {
-                debug('Service %s is not found! %j', serviceName, serviceList[serviceName]);
-                delete serviceList[serviceName];
-            }
-        });
-
-        return serviceList;
-    });
-};
-
 Checker.prototype.getServiceChannels = function() {
     var _this = this;
     var serviceNames = Object.keys(this.gOptions.services);
