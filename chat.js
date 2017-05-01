@@ -801,15 +801,13 @@ var Chat = function(options) {
             delete service.channelObjMap;
         });
 
-        return Promise.resolve({
-            services: services
-        }).then(function (info) {
-            if (!info.services.length) {
+        return Promise.resolve(services).then(function (services) {
+            if (!services.length) {
                 return bot.sendMessage(chatId, language.emptyServiceList);
             }
 
             var serviceList = [];
-            info.services.forEach(function (service) {
+            services.forEach(function (service) {
                 var channelList = [];
                 channelList.push(base.htmlSanitize('b', serviceToTitle[service.name]) + ':');
                 service.channels.forEach(function (channel) {

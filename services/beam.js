@@ -49,7 +49,6 @@ Beam.prototype.insertItem = function (channel, snippet) {
         var url = _this.getChannelUrl(snippet.token);
 
         var data = {
-            service: _this.name,
             _id: _this.channels.wrapId(id, _this.name),
             _channelId: channel.id,
 
