@@ -277,42 +277,6 @@ utils.extend = function() {
 };
 
 /**
- * @param {Object} gOptions
- * @param {String} service
- * @param {String} channelName
- * @return {Promise}
- */
-utils.getChannelTitle = function(gOptions, service, channelName) {
-    var services = gOptions.services;
-
-    var result;
-    if (services[service].getChannelTitle) {
-        result = services[service].getChannelTitle(channelName);
-    } else {
-        result = Promise.resolve(channelName);
-    }
-
-    return result;
-};
-
-/**
- * @param {Object} gOptions
- * @param {String} serviceName
- * @param {String} channelId
- * @return {String}
- */
-utils.getChannelUrl = function(gOptions, serviceName, channelId) {
-    var result = '';
-    var service = gOptions.services[serviceName];
-    if (service.getChannelUrl) {
-        result = service.getChannelUrl(channelId);
-    } else {
-        result = channelId;
-    }
-    return result;
-};
-
-/**
  * @param {number} limitPerSecond
  * @constructor
  */

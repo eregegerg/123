@@ -148,6 +148,8 @@ var Chat = function(options) {
                 if (!channel) {
                     channel = service.channelObjMap[channelId] = {
                         id: channelId,
+                        title: item.title,
+                        url: item.url,
                         count: 0
                     };
                     service.count++;
@@ -172,19 +174,11 @@ var Chat = function(options) {
                 service.channels.sort(sortFn).splice(10);
             });
 
-            return Promise.all(services.map(function (service) {
-                return Promise.all(service.channels.map(function (channel) {
-                    return base.getChannelTitle(options, service.name, channel.id).then(function (title) {
-                        channel.title = title;
-                    })
-                }));
-            })).then(function () {
-                return {
-                    users: chatIds,
-                    channels: channels,
-                    services: services
-                };
-            });
+            return {
+                users: chatIds,
+                channels: channels,
+                services: services
+            };
         }).then(function (info) {
             var textArr = [];
 
@@ -320,7 +314,7 @@ var Chat = function(options) {
         return _this.gOptions.msgStack.getLastStreamList().then(function (lastStreamList) {
             var streamList = [];
             lastStreamList.some(function (stream) {
-                if (stream._channelId === query.channelId && stream._service === query.service && !stream._isOffline) {
+                if (stream._channelId === query.channelId && !stream._isOffline) {
                     streamList.push(stream);
                     return true;
                 }
@@ -384,8 +378,8 @@ var Chat = function(options) {
         }
 
         var onResponseChannel = function (channelName, serviceName, messageId) {
-            return addChannel(req, serviceName, channelName).then(function (/*ChannelInfo*/channel) {
-                var url = base.getChannelUrl(_this.gOptions, serviceName, channel.id);
+            return addChannel(req, serviceName, channelName).then(function (/*dbChannel*/channel) {
+                var url = channel.url;
                 var displayName = base.htmlSanitize('a', channel.title, url);
 
                 var result = language.channelAdded
@@ -630,20 +624,16 @@ var Chat = function(options) {
         var btnList = [];
         var promise = Promise.resolve();
         channels.forEach(function(item) {
-            promise = promise.then(function () {
-                return base.getChannelTitle(_this.gOptions, item.service, item.channelId).then(function (title) {
-                    var btnItem = {};
+            var btnItem = {};
 
-                    btnItem.text = title;
-                    btnItem.text += ' (' + serviceToTitle[item.service] + ')';
+            btnItem.text = item.title;
+            btnItem.text += ' (' + serviceToTitle[item.service] + ')';
 
-                    btnItem.callback_data = '/delete?' + querystring.stringify({
-                        channelId: item.channelId
-                    });
-
-                    btnList.push([btnItem]);
-                });
+            btnItem.callback_data = '/delete?' + querystring.stringify({
+                channelId: item.channelId
             });
+
+            btnList.push([btnItem]);
         });
 
         return promise.then(function () {
@@ -789,7 +779,9 @@ var Chat = function(options) {
             var channel = service.channelObjMap[channelId];
             if (!channel) {
                 channel = service.channelObjMap[channelId] = {
-                    id: channelId
+                    id: channelId,
+                    title: item.title,
+                    url: item.url
                 };
                 service.count++;
                 service.channels.push(channel);
@@ -809,16 +801,8 @@ var Chat = function(options) {
             delete service.channelObjMap;
         });
 
-        return Promise.all(services.map(function (service) {
-            return Promise.all(service.channels.map(function (channel) {
-                return base.getChannelTitle(_this.gOptions, service.name, channel.id).then(function (title) {
-                    channel.title = title;
-                })
-            }));
-        })).then(function () {
-            return {
-                services: services
-            };
+        return Promise.resolve({
+            services: services
         }).then(function (info) {
             if (!info.services.length) {
                 return bot.sendMessage(chatId, language.emptyServiceList);
@@ -829,7 +813,7 @@ var Chat = function(options) {
                 var channelList = [];
                 channelList.push(base.htmlSanitize('b', serviceToTitle[service.name]) + ':');
                 service.channels.forEach(function (channel) {
-                    channelList.push(base.htmlSanitize('a', channel.title, base.getChannelUrl(_this.gOptions, service.name, channel.id)));
+                    channelList.push(base.htmlSanitize('a', channel.title, channel.url));
                 });
                 serviceList.push(channelList.join('\n'));
             });
@@ -1159,14 +1143,14 @@ var Chat = function(options) {
                 }
 
                 promise = promise.then(function () {
-                    return base.getChannelTitle(_this.gOptions, service, channelId).then(function (title) {
+                    return _this.gOptions.channels.getChannel(channelId).then(function (channel) {
+                        var title = channel.title;
                         var text = title + ' (' + serviceToTitle[service] + ')';
 
                         btnList.push([{
                             text: text,
                             callback_data: '/watch?' + querystring.stringify({
-                                channelId: channelId,
-                                service: service
+                                channelId: channelId
                             })
                         }]);
                     });
